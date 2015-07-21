@@ -86,7 +86,7 @@
       // The css used by the default player. This is is dynamically injected into a `<style>` tag in the top of the head.
       css: '\
         .audiojs audio { position: absolute; left: -1px; } \
-        .audiojs { width: 460px; height: 36px; background: #404040; overflow: hidden; font-family: monospace; font-size: 12px; \
+        .audiojs { width: 480px; height: 36px; background: #404040; overflow: hidden; font-family: monospace; font-size: 12px; \
           background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #444), color-stop(0.5, #555), color-stop(0.51, #444), color-stop(1, #444)); \
           background-image: -moz-linear-gradient(center top, #444 0%, #555 50%, #444 51%, #444 100%); \
           -webkit-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); -moz-box-shadow: 1px 1px 8px rgba(0, 0, 0, 0.3); \
@@ -286,7 +286,17 @@
           leftPos = function(elem) {
             var curleft = 0;
             if (elem.offsetParent) {
-              do { curleft += elem.offsetLeft; } while (elem = elem.offsetParent);
+              do {
+                curleft += elem.offsetLeft;
+                if (elem.tagName == "BODY")
+                {
+                  var root = document.getElementsByTagName('html')[0];
+                  if (root.clientWidth != elem.clientWidth)
+                    curleft += (root.clientWidth - elem.clientWidth) / 2;
+                }
+                elem = elem.offsetParent
+              } while (elem != null);
+              var root = document.getElementsByTagName('html')[0].tagName;
             }
             return curleft;
           };
